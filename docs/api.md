@@ -31,6 +31,23 @@ php artisan postcode:download
 
 ---
 
+### `postcode:seed`
+
+Seeds all postcode tables (provinces, regencies, districts, villages) from the downloaded CSV.
+
+```bash
+php artisan postcode:seed
+```
+
+**Options:** None
+
+**Output:** All 4 tables populated with data from Pos Indonesia
+
+{: .tip }
+This command is a convenient alternative to `php artisan db:seed --class=...`, which can fail on Linux due to shell backslash escaping.
+
+---
+
 ## Models
 
 ### Province

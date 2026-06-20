@@ -83,7 +83,7 @@ This command makes an HTTP request to the Pos Indonesia server. Ensure your serv
 Run the seeder to populate your database:
 
 ```bash
-php artisan db:seed --class=Ajangsupardi\PostcodeId\Database\Seeders\PostcodeSeeder
+php artisan postcode:seed
 ```
 
 Or add to your `DatabaseSeeder.php`:
