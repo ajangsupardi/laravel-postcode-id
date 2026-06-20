@@ -80,6 +80,9 @@ This command makes an HTTP request to the Pos Indonesia server. Ensure your serv
 
 ## Seed Database
 
+{: .warning }
+Make sure you have run `php artisan migrate` first to create the required tables.
+
 Run the seeder to populate your database:
 
 ```bash

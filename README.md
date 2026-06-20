@@ -45,9 +45,10 @@ php artisan postcode:download
 
 This command will download all postcode data from Pos Indonesia and save it as a CSV file.
 
-### 2. Run the Seeder
+### 2. Run Migrations & Seeder
 
 ```bash
+php artisan migrate
 php artisan postcode:seed
 ```
 
