@@ -3,6 +3,7 @@
 namespace Ajangsupardi\PostcodeId;
 
 use Ajangsupardi\PostcodeId\Console\Commands\DownloadPostcode;
+use Ajangsupardi\PostcodeId\Console\Commands\SeedPostcode;
 use Ajangsupardi\PostcodeId\Services\PostcodeParser;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,6 +26,7 @@ class PostcodeIdServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 DownloadPostcode::class,
+                SeedPostcode::class,
             ]);
         }
     }

@@ -48,7 +48,7 @@ This command will download all postcode data from Pos Indonesia and save it as a
 ### 2. Run the Seeder
 
 ```bash
-php artisan db:seed --class=Ajangsupardi\PostcodeId\Database\Seeders\PostcodeSeeder
+php artisan postcode:seed
 ```
 
 Or add it to your `DatabaseSeeder.php`:
