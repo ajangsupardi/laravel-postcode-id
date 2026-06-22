@@ -4,16 +4,16 @@
 [![License](https://poser.pugx.org/ajangsupardi/laravel-postcode-id/license)](https://packagist.org/packages/ajangsupardi/laravel-postcode-id)
 [![Total Downloads](https://poser.pugx.org/ajangsupardi/laravel-postcode-id/downloads)](https://packagist.org/packages/ajangsupardi/laravel-postcode-id)
 
-Laravel package for downloading and seeding Indonesian address data (provinces, regencies, districts, villages) with postal codes from the official Pos Indonesia website.
+Laravel package for Indonesian address data with postal codes — downloaded fresh from Pos Indonesia.
 
 ## Features
 
-- Auto-download postcode data from [Pos Indonesia](https://kodepos.posindonesia.co.id)
-- Hierarchical data parsing: Province → Regency → District → Village
-- Ready-to-use database seeders
-- Migration files included
-- Configurable and extendable Eloquent models
-- Supports Laravel 11, 12, and 13
+- **Postal code lookup** — Query villages by postal code with full address hierarchy
+- **Fresh data** — Downloads directly from [Pos Indonesia](https://kodepos.posindonesia.co.id), not static dumps
+- **Idempotent seeders** — Safe to run multiple times without duplicates
+- **Hierarchical parsing** — Province → Regency → District → Village with name normalization
+- **Custom models** — Extend default models or use your own
+- **Laravel 11, 12, 13** — Modern PHP 8.3+
 
 ## Installation
 
@@ -76,6 +76,31 @@ $storagePath = config('postcode.storage_path');
 if (! file_exists($storagePath.'/kodepos.csv')) {
     Artisan::call('postcode:download');
 }
+```
+
+## Postal Code Lookup
+
+The main feature — find any Indonesian address by postal code:
+
+```php
+use Ajangsupardi\PostcodeId\Models\Village;
+
+// Village by postal code
+$village = Village::where('postal_code', '60111')->first();
+
+// With full address hierarchy
+$village = Village::with('district.regency.province')
+    ->where('postal_code', '60111')
+    ->first();
+
+// Result: Gubeng → Kota Surabaya → Jawa Timur
+```
+
+```php
+// Search by village name
+$villages = Village::where('name', 'LIKE', '%Gubeng%')
+    ->with('district.regency')
+    ->get();
 ```
 
 ## Database Tables
@@ -182,6 +207,14 @@ $village = Village::with('district.regency.province')
 
 - PHP ^8.3
 - Laravel ^11.0 / ^12.0 / ^13.0
+
+## Changelog
+
+### v1.1.0
+- Added `postcode:seed` artisan command to fix shell escaping bug on Linux
+
+### v1.0.0
+- Initial release — download, parse, and seed Indonesian address data with postal codes
 
 ## License
 
