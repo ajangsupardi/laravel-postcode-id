@@ -3,6 +3,7 @@
 namespace Ajangsupardi\PostcodeId\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 
 class DownloadPostcode extends Command
@@ -52,7 +53,9 @@ class DownloadPostcode extends Command
         try {
             $response = Http::timeout($config['timeout'])
                 ->connectTimeout($config['connect_timeout'])
-                ->retry($config['retry'], $config['retry_delay'])
+                ->retry($config['retry'], $config['retry_delay'], function (\Exception $exception) {
+                    return $exception instanceof ConnectionException;
+                })
                 ->withHeaders([
                     'User-Agent' => $config['user_agent'],
                 ])

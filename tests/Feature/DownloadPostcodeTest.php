@@ -4,6 +4,7 @@ namespace Ajangsupardi\PostcodeId\Tests\Feature;
 
 use Ajangsupardi\PostcodeId\Console\Commands\DownloadPostcode;
 use Ajangsupardi\PostcodeId\Tests\TestCase;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 
 class DownloadPostcodeTest extends TestCase
@@ -68,6 +69,31 @@ class DownloadPostcodeTest extends TestCase
         $this->artisan(DownloadPostcode::class)
             ->expectsOutputToContain('Total rows: 1')
             ->assertExitCode(0);
+    }
+
+    public function test_retries_on_connection_exception(): void
+    {
+        $html = $this->sampleHtml([
+            [1, '1234567890', 'Desa Test', 'Kec Test', 'Kab. Test', 'ACEH'],
+        ]);
+
+        $callCount = 0;
+        Http::fake([
+            'kodepos.posindonesia.co.id/*' => function () use (&$callCount, $html) {
+                $callCount++;
+                if ($callCount === 1) {
+                    throw new ConnectionException('Connection reset by peer');
+                }
+
+                return Http::response($html, 200);
+            },
+        ]);
+
+        $this->artisan(DownloadPostcode::class)
+            ->expectsOutputToContain('Total rows: 1')
+            ->assertExitCode(0);
+
+        $this->assertEquals(2, $callCount);
     }
 
     private function sampleHtml(array $rows): string
