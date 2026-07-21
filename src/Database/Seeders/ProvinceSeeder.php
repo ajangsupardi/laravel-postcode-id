@@ -36,6 +36,12 @@ class ProvinceSeeder extends Seeder
             'Papua Pegunungan' => 'PP', 'Papua Barat Daya' => 'PD',
         ];
 
+        $this->command?->info('Seeding provinces...');
+
+        if (isset($this->output)) {
+            $this->output->progressStart(count($provinces));
+        }
+
         foreach ($provinces as $name) {
             $code = $isoMap[$name] ?? strtoupper(substr($name, 0, 2));
 
@@ -43,6 +49,14 @@ class ProvinceSeeder extends Seeder
                 ['code' => $code],
                 ['name' => $name]
             );
+
+            if (isset($this->output)) {
+                $this->output->progressAdvance();
+            }
+        }
+
+        if (isset($this->output)) {
+            $this->output->progressFinish();
         }
 
         $this->command?->info('Seeded '.count($provinces).' provinces from postcode.');

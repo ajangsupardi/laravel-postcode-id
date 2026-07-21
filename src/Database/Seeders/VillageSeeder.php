@@ -34,6 +34,13 @@ class VillageSeeder extends Seeder
         $chunkSize = 1000;
         $tableName = app($villageModel)->getTable();
         $isPostgres = DB::getDriverName() === 'pgsql';
+        $count = array_sum(array_map('count', $villagesByDistrict));
+
+        $this->command?->info('Seeding villages...');
+
+        if (isset($this->output)) {
+            $this->output->progressStart($count);
+        }
 
         if ($isPostgres) {
             DB::statement('ALTER TABLE '.$tableName.' DISABLE TRIGGER ALL');
@@ -66,6 +73,10 @@ class VillageSeeder extends Seeder
                     ];
                     $total++;
 
+                    if (isset($this->output)) {
+                        $this->output->progressAdvance();
+                    }
+
                     if (count($chunk) >= $chunkSize) {
                         $villageModel::insert($chunk);
                         $chunk = [];
@@ -80,6 +91,10 @@ class VillageSeeder extends Seeder
             if ($isPostgres) {
                 DB::statement('ALTER TABLE '.$tableName.' ENABLE TRIGGER ALL');
             }
+        }
+
+        if (isset($this->output)) {
+            $this->output->progressFinish();
         }
 
         $this->command?->info('Seeded '.$total.' villages from postcode.');

@@ -24,6 +24,13 @@ class DistrictSeeder extends Seeder
 
         $regencyMap = $regencyModel::pluck('id', 'name')->toArray();
         $total = 0;
+        $count = array_sum(array_map('count', $districtsByRegency));
+
+        $this->command?->info('Seeding districts...');
+
+        if (isset($this->output)) {
+            $this->output->progressStart($count);
+        }
 
         foreach ($districtsByRegency as $regName => $districtNames) {
             if (! isset($regencyMap[$regName])) {
@@ -38,7 +45,15 @@ class DistrictSeeder extends Seeder
                     []
                 );
                 $total++;
+
+                if (isset($this->output)) {
+                    $this->output->progressAdvance();
+                }
             }
+        }
+
+        if (isset($this->output)) {
+            $this->output->progressFinish();
         }
 
         $this->command?->info('Seeded '.$total.' districts from postcode.');

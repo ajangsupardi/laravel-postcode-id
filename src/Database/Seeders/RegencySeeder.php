@@ -24,6 +24,13 @@ class RegencySeeder extends Seeder
 
         $provinceMap = $provinceModel::pluck('id', 'name')->toArray();
         $total = 0;
+        $count = array_sum(array_map('count', $regenciesByProvince));
+
+        $this->command?->info('Seeding regencies...');
+
+        if (isset($this->output)) {
+            $this->output->progressStart($count);
+        }
 
         foreach ($regenciesByProvince as $provName => $regencyNames) {
             if (! isset($provinceMap[$provName])) {
@@ -38,7 +45,15 @@ class RegencySeeder extends Seeder
                     []
                 );
                 $total++;
+
+                if (isset($this->output)) {
+                    $this->output->progressAdvance();
+                }
             }
+        }
+
+        if (isset($this->output)) {
+            $this->output->progressFinish();
         }
 
         $this->command?->info('Seeded '.$total.' regencies from postcode.');
