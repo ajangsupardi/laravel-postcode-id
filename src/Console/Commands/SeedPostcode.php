@@ -5,6 +5,7 @@ namespace Ajangsupardi\PostcodeId\Console\Commands;
 use Ajangsupardi\PostcodeId\Database\Seeders\PostcodeSeeder;
 use Illuminate\Console\Command;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Facades\Artisan;
 
 class SeedPostcode extends Command
 {
@@ -17,7 +18,12 @@ class SeedPostcode extends Command
         $db->beginTransaction();
 
         try {
-            $this->call(PostcodeSeeder::class);
+            Artisan::call('db:seed', [
+                '--class' => PostcodeSeeder::class,
+                '--force' => true,
+            ]);
+
+            $this->info(Artisan::output());
 
             $db->commit();
 
