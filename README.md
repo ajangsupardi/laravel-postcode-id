@@ -210,6 +210,9 @@ $village = Village::with('district.regency.province')
 
 ## Changelog
 
+### v1.1.3
+- Add progress bar to all seeders for visual feedback during bulk operations
+
 ### v1.1.2
 - Fix `postcode:download` failing on transient network errors — retry now handles cURL connection exceptions
 
