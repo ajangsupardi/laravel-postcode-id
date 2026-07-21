@@ -17,9 +17,8 @@ class SeedPostcode extends Command
         Artisan::call('db:seed', [
             '--class' => PostcodeSeeder::class,
             '--force' => true,
-        ]);
+        ], $this->getOutput());
 
-        $this->info(Artisan::output());
         $this->info('All postcode tables have been seeded successfully.');
 
         return self::SUCCESS;
