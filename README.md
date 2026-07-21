@@ -210,6 +210,9 @@ $village = Village::with('district.regency.province')
 
 ## Changelog
 
+### v1.1.4
+- Fix `postcode:seed` hanging indefinitely — use `Artisan::call()` instead of `Command::call()` to correctly invoke seeder
+
 ### v1.1.3
 - Add progress bar to all seeders for visual feedback during bulk operations
 
