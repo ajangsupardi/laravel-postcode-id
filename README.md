@@ -210,6 +210,12 @@ $village = Village::with('district.regency.province')
 
 ## Changelog
 
+### v1.1.2
+- Fix `postcode:download` failing on transient network errors — retry now handles cURL connection exceptions
+
+### v1.1.1
+- Fix `VillageSeeder` hanging/timing out on PostgreSQL — foreign key triggers are temporarily disabled during bulk insert
+
 ### v1.1.0
 - Added `postcode:seed` artisan command to fix shell escaping bug on Linux
 
