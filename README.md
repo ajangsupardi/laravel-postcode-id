@@ -210,6 +210,9 @@ $village = Village::with('district.regency.province')
 
 ## Changelog
 
+### v1.1.6
+- Fix progress bar not displaying in terminal during `postcode:seed`
+
 ### v1.1.5
 - Fix `postcode:seed` hanging on PostgreSQL — remove transaction wrapper that caused deadlock
 
