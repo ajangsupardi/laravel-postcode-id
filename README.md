@@ -210,6 +210,9 @@ $village = Village::with('district.regency.province')
 
 ## Changelog
 
+### v1.1.5
+- Fix `postcode:seed` hanging on PostgreSQL — remove transaction wrapper that caused deadlock
+
 ### v1.1.4
 - Fix `postcode:seed` hanging indefinitely — use `Artisan::call()` instead of `Command::call()` to correctly invoke seeder
 
